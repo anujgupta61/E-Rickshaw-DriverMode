@@ -1,16 +1,13 @@
 package com.andromap33.e_rickshawdrivermode;
 
-import android.provider.Settings;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -35,20 +32,50 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
     private LocationRequest mLocationRequest; // location object that holds location values fetched
     private String  driver_id ;
     private  long sTime =0 ;
+    Notification _foregroundNotification;
+    final int notificationId = 1;
+
 
 
     @Override
     public IBinder onBind(Intent intent) {
-        // TODO for communication return IBinder implementation
 
         // Service is not binded to any activity , hence no binding required
 
         return null;
     }
 
+
+
+    void startInForeground()
+    {
+        int notification_icon = R.drawable.icon;
+        String notificationTrickertext = "E-rickshaw app about to start ";
+        long notificationTimeStamp = System.currentTimeMillis();
+        String notificationTitleText = "E-rickshaw App";
+        String notificationBodyText = "E-rickshaw App is Currently running .Thank for using our service";
+        Intent intent = new Intent(this,MainActivity.class);
+        PendingIntent notificationPendingIntent = PendingIntent.getActivity(this,0,intent,0);
+
+        _foregroundNotification = new Notification.Builder(getApplicationContext())
+                .setSmallIcon(notification_icon)
+                .setTicker(notificationTrickertext)
+                .setWhen(notificationTimeStamp)
+                .setContentText(notificationBodyText)
+                .setContentTitle(notificationTitleText)
+                .setContentIntent(notificationPendingIntent)
+                .build();
+
+
+        startForeground(notificationId,_foregroundNotification);
+
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
+
+        startInForeground(); // start in foreground
 
         // creating Google API Client
         mGoogleApiClient = new GoogleApiClient
@@ -60,6 +87,8 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
         // Getting Driver id from Shared Preferences
         driver_id = SaveSharedPreference.getDriverID(this);
     }
+
+
 
 
 
