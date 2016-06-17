@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<instant-run
+    abi="x86,x86_64"
+    api-level="23"
+    density="560dpi"
+    format="7"
+    timestamp="3043159655811"
+    token="4674523848894925776" >
+
+    <task
+        name="javac"
+        duration="504" />
+    <task
+        name="instant-run-dex"
+        duration="0" />
+    <task
+        name="instant-run-transform"
+        duration="173" />
+    <task
+        name="verifier"
+        duration="21" />
+
+    <artifact
+        location="/home/mohit/AndroidStudioProjects/E-rickshawVersion 1.0/E-Rickshaw(Drivermode)/app/build/outputs/apk/app-debug.apk"
+        type="MAIN" />
+
+    <build timestamp="3043159655811" >
+        <artifact
+            location="/home/mohit/AndroidStudioProjects/E-rickshawVersion 1.0/E-Rickshaw(Drivermode)/app/build/outputs/apk/app-debug.apk"
+            type="MAIN" />
+    </build>
+
+</instant-run>
