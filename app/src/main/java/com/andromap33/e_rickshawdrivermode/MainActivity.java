@@ -45,19 +45,27 @@ public class MainActivity extends AppCompatActivity{
             driver_id = SaveSharedPreference.getDriverID(this);
             setContentView(R.layout.activity_main);
             TextView d_id = (TextView) findViewById(R.id.d_id) ;
-            d_id . setText("Your Driver ID - " + driver_id) ;
+                         try {
+                 String demo =  "Your Driver ID - " + driver_id.toString();
+                 d_id.setText(demo);
+             }catch( NullPointerException e ){
+                 Log.i("paramMessage" , "nullpointerException");
+             }
 
              if (!checkConnection(this)) {
-                 showInternetNotAvailableAlert(this); // by mohit
-
+                 showInternetNotAvailableAlert(this);
              }
-            else if(isGooglePlayServicesAvailable(this))  // by mohit
+            else if(isGooglePlayServicesAvailable(this))
             {
+                Toast.makeText(this, "GMS is INSTALLED", Toast.LENGTH_SHORT).show();
+                try{
+                    d_id.setText("else of gpl") ;
+                }catch( NullPointerException e ){
+                    Log.i("paramMessage" , "nullPointer");
+                }
                 startService(new Intent(getBaseContext(), MyService.class));
 
             }
-
-
         }
     }
 
