@@ -99,6 +99,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
         return Service.START_STICKY;
     }
 
+    
     void SendData(final String driverID , final String lati , final String lngi) {
 
         /* this function sends the data to remote server . It Uses Asynctask for background work */
@@ -107,53 +108,62 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
             @Override
             protected String doInBackground(String... params) {
 
-        String data = "";
-        try {
-            data = URLEncoder.encode("d_id", "UTF-8")
-                    + "=" + URLEncoder.encode(driverID, "UTF-8");
+                String data = "";
+                try {
+                    data = URLEncoder.encode("d_id", "UTF-8")
+                            + "=" + URLEncoder.encode(driverID, "UTF-8");
 
-            data += "&" + URLEncoder.encode("lat", "UTF-8") + "="
-                    + URLEncoder.encode(lati, "UTF-8");
+                    data += "&" + URLEncoder.encode("lat", "UTF-8") + "="
+                            + URLEncoder.encode(lati, "UTF-8");
 
-            data += "&" + URLEncoder.encode("lng", "UTF-8")
-                    + "=" + URLEncoder.encode(lngi, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            Toast.makeText(getApplicationContext(), "Location data not encoded ...", Toast.LENGTH_LONG).show();
-        }
-        String text = "";
-        BufferedReader reader = null;
-        // Send data
-        try {
-            // Defined URL  where to send data
-            URL url = new URL("http://andromap33.orgfree.com/insert_location.php");
+                    data += "&" + URLEncoder.encode("lng", "UTF-8")
+                            + "=" + URLEncoder.encode(lngi, "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    Toast.makeText(getApplicationContext(), "Location data not encoded ...", Toast.LENGTH_LONG).show();
+                }
+                String text = "";
+                BufferedReader reader = null;
+                // Send data
+                try {
+                    // Defined URL  where to send data
+                    URL url = new URL("http://andromap33.orgfree.com/insert_location.php");
 
-            // Send POST data request
-            URLConnection conn = url.openConnection();
-            conn.setDoOutput(true);
-            OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-            wr.write(data);
-            wr.flush();
+                    // Send POST data request
+                    URLConnection conn = url.openConnection();
+                    try {
+                         OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+                         wr.write(data);
+                         wr.flush();
+                    }catch( IOException exp ){
+                        Log.i("paramMessage" , "POST DataRequestFailed");
+                    }
 
-            // Get the server response
-            reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            StringBuilder sb = new StringBuilder();
-            String line = null;
+                    // Get the server response
+                    try {
+                        reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                        StringBuilder sb = new StringBuilder();
+                        String line = null;
 
-            // Read Server Response
-            while ((line = reader.readLine()) != null) {
-                // Append server response in string
-                sb.append(line + "\n");
-            }
-            text = sb.toString();
-        } catch (Exception ex) {
-            Toast.makeText(getApplicationContext(), "Location data not sent ...", Toast.LENGTH_LONG).show();
-        } finally {
-            try {
-                reader.close();
-            } catch (Exception ex) {
-                Toast.makeText(getApplicationContext(), "Buffer Reader not closed ...", Toast.LENGTH_LONG).show();
-            }
-        }
+                        // Read Server Response
+                        while ((line = reader.readLine()) != null) {
+                            // Append server response in string
+                            sb.append(line + "\n");
+                        }
+                        text = sb.toString();
+
+                    }catch( IOException exp ){
+                        Log.i("paramMessage" , "ServerResponse Failed");
+                    }
+
+                } catch (Exception ex) {
+                    Toast.makeText(getApplicationContext(), "Location data not sent ...", Toast.LENGTH_LONG).show();
+                } finally {
+                    try {
+                        reader.close();
+                    } catch (Exception ex) {
+                        Toast.makeText(getApplicationContext(), "Buffer Reader not closed ...", Toast.LENGTH_LONG).show();
+                    }
+                }
                 return "Location sent ...." ;
             }
 
