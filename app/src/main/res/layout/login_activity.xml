@@ -1,37 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <ScrollView android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android" >
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center"
-    android:background="@drawable/e_rickshaw1"
-    android:orientation="vertical" >
-
-    <EditText
-        android:paddingTop="5dp"
-        android:background="#FFFFFF"
-        android:id="@+id/driver_id"
-        android:layout_width="300dp"
-        android:textColor="#F44336"
-        android:textColorHint="#F44336"
-        android:textColorHighlight="#F44336"
-        android:layout_height="40dp"
-        android:hint="Enter Driver Id here ..."
-        android:gravity="center_horizontal"
-        android:imeOptions="actionSearch"
-        android:textSize="20sp"/>
-
-    <Button
-        android:textColor="#F44336"
-        android:onClick="getValue"
-        android:layout_marginTop="20dp"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="SUBMIT"
-        android:id="@+id/submit" />
-</LinearLayout>
+        android:gravity="center" >
+
+        <ImageView
+            android:id="@+id/logo"
+            android:contentDescription="@string/logo"
+            android:src="@drawable/e_rickshaw1"
+            android:scaleType="fitStart"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <EditText
+            android:layout_above="@id/submit"
+            android:layout_centerHorizontal="true"
+            android:paddingTop="5dp"
+            android:background="#FFFFFF"
+            android:id="@+id/driver_id"
+            android:layout_width="300dp"
+            android:textColor="@color/black"
+            android:layout_height="40dp"
+            android:hint="@string/driver_id_hint"
+            android:gravity="center_horizontal"
+            android:imeOptions="actionSearch"
+            android:textSize="20sp"/>
+
+        <Button
+            android:id="@+id/submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/logo"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@color/colorPrimaryDark"
+            android:onClick="getValue"
+            android:text="@string/verify"
+            android:textColor="@color/white" />
+
+    </RelativeLayout>
+
 </ScrollView>

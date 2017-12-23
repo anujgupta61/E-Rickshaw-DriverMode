@@ -8,6 +8,7 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -17,7 +18,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
 import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
@@ -26,22 +27,15 @@ import java.net.URLEncoder;
 
 public class MyService extends Service implements GoogleApiClient.ConnectionCallbacks , GoogleApiClient.OnConnectionFailedListener , LocationListener {
 
-
     private  GoogleApiClient mGoogleApiClient; // creating google API client
-
-    private LocationRequest mLocationRequest; // location object that holds location values fetched
     private String  driver_id ;
     private  long sTime =0 ;
     Notification _foregroundNotification;
     final int notificationId = 1;
 
-
-
     @Override
     public IBinder onBind(Intent intent) {
-
         // Service is not binded to any activity , hence no binding required
-
         return null;
     }
 
@@ -107,7 +101,6 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
 
             @Override
             protected String doInBackground(String... params) {
-
                 String data = "";
                 try {
                     data = URLEncoder.encode("d_id", "UTF-8")
@@ -121,12 +114,11 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
                 } catch (UnsupportedEncodingException e) {
                     Toast.makeText(getApplicationContext(), "Location data not encoded ...", Toast.LENGTH_LONG).show();
                 }
-                String text = "";
                 BufferedReader reader = null;
                 // Send data
                 try {
                     // Defined URL  where to send data
-                    URL url = new URL("http://andromap33.orgfree.com/insert_location.php");
+                    URL url = new URL("https://erickshaw.000webhostapp.com/insert_location.php");
 
                     // Send POST data request
                     URLConnection conn = url.openConnection();
@@ -139,21 +131,24 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
                     }
 
                     // Get the server response
+                    /*
                     try {
                         reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                         StringBuilder sb = new StringBuilder();
-                        String line = null;
+                        String line;
 
                         // Read Server Response
                         while ((line = reader.readLine()) != null) {
                             // Append server response in string
-                            sb.append(line + "\n");
+                            String newLine = line + "\n";
+                            sb.append(newLine);
                         }
-                        text = sb.toString();
+                        String text = sb.toString();
 
                     }catch( IOException exp ){
                         Log.i("paramMessage" , "ServerResponse Failed");
                     }
+                    */
 
                 } catch (Exception ex) {
                     Toast.makeText(getApplicationContext(), "Location data not sent ...", Toast.LENGTH_LONG).show();
@@ -177,9 +172,6 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
         sendPostReqAsyncTask.execute();
     }
 
-
-
-
     @Override
     public void onDestroy() {
         // Disconected Google Api Client
@@ -189,8 +181,7 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
 
     @Override
     public void onConnected(Bundle bundle) {
-
-        mLocationRequest = LocationRequest.create();
+        LocationRequest mLocationRequest = LocationRequest.create(); // location object that holds location values fetched
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(5000) ;
         try {
@@ -203,7 +194,6 @@ public class MyService extends Service implements GoogleApiClient.ConnectionCall
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-
         Toast.makeText(this, "Check Your Internet Connection", Toast.LENGTH_SHORT).show();
     }
 

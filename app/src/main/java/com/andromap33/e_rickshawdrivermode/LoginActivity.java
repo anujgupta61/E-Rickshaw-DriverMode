@@ -2,21 +2,19 @@ package com.andromap33.e_rickshawdrivermode;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.KeyEvent;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-import android.util.Log;
-import android.provider.Settings;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -64,11 +62,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void getValue(View view) {
-        EditText txt = (EditText) findViewById(R.id.driver_id);
+        EditText txt = findViewById(R.id.driver_id);
         String d_id = txt.getText().toString();
         SendData(d_id);
     }
-
 
     @Override
     protected  void onStop() {
@@ -76,16 +73,13 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     boolean checkConnection(Context context) {
-        ConnectivityManager cm =
-                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
-        return isConnected ;
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
     void SendData(final String driverID) {
-        
+
         class wrapper {
             String status;
         }
@@ -109,17 +103,16 @@ public class LoginActivity extends AppCompatActivity {
                     data = URLEncoder.encode("d_id", "UTF-8")
                             + "=" + URLEncoder.encode(driverID, "UTF-8");
                 } catch (UnsupportedEncodingException e) {
-
+                    e.printStackTrace();
                 }
 
-                String text = "";
                 BufferedReader reader = null;
 
                 // Send data
                 try {
 
                     // Defined URL  where to send data
-                    URL url = new URL("http://andromap33.orgfree.com/verify.php");
+                    URL url = new URL("https://erickshaw.000webhostapp.com/verify.php");
 
                     // Send POST data request
 
@@ -130,10 +123,9 @@ public class LoginActivity extends AppCompatActivity {
                     wr.flush();
 
                     // Get the server response
-
                     reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                     //StringBuilder sb = new StringBuilder();
-                    String line = null , str = "";
+                    String line, str = "";
 
                     // Read Server Response
                     while ((line = reader.readLine()) != null) {
@@ -142,12 +134,12 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     w.status = str;
                 } catch (Exception ex) {
-
+                    ex.printStackTrace();
                 } finally {
                     try {
-
                         reader.close();
                     } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
                 }
                 return w;

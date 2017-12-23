@@ -14,18 +14,14 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
-public class MainActivity extends AppCompatActivity{
-    private String driver_id;
-
+public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
          if (SaveSharedPreference.getDriverID(this).length() == 0) {
             Intent intent = new Intent(this, LoginActivity.class);
@@ -42,36 +38,25 @@ public class MainActivity extends AppCompatActivity{
                         1);
             }
             ShowGPSSettings(this) ;
-            driver_id = SaveSharedPreference.getDriverID(this);
+            String driver_id = SaveSharedPreference.getDriverID(this);
             setContentView(R.layout.activity_main);
-            TextView d_id = (TextView) findViewById(R.id.d_id) ;
-                         try {
-                 String demo =  "Your Driver ID - " + driver_id.toString();
+            TextView d_id = findViewById(R.id.d_id);
+             try {
+                 String demo =  "Driver ID - " + driver_id;
                  d_id.setText(demo);
-             }catch( NullPointerException e ){
+             } catch( NullPointerException e ){
                  Log.i("paramMessage" , "nullpointerException");
              }
 
              if (!checkConnection(this)) {
                  showInternetNotAvailableAlert(this);
-             }
-            else if(isGooglePlayServicesAvailable(this))
-            {
-                Toast.makeText(this, "GMS is INSTALLED", Toast.LENGTH_SHORT).show();
-                try{
-                    d_id.setText("else of gpl") ;
-                }catch( NullPointerException e ){
-                    Log.i("paramMessage" , "nullPointer");
-                }
+             } else if(isGooglePlayServicesAvailable(this)) {
                 startService(new Intent(getBaseContext(), MyService.class));
-
             }
         }
     }
 
-
-    public void showInternetNotAvailableAlert(Activity activity)
-    {
+    public void showInternetNotAvailableAlert(Activity activity) {
         try {
             AlertDialog.Builder builder = new AlertDialog.Builder(activity);
             builder.setTitle("NO INTERNET")
@@ -82,15 +67,11 @@ public class MainActivity extends AppCompatActivity{
                             dialog . cancel() ;
                         }
                     });
-
-
             AlertDialog alert = builder.create();
             alert.show();
-
         }
-        catch(Exception e)
-        {
-            
+        catch(Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -111,28 +92,21 @@ public class MainActivity extends AppCompatActivity{
         super.onPause();
     }
 
-
-
-    public void onRequestPermissionsResult(int requestCode,
-                                           String[] permissions,
-                                           int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == 1) {
-            if(grantResults.length == 1
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if(grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             	ShowGPSSettings(this) ;
                 this.recreate() ;
-            } else {
-
             }
         }
     }
 
     public void ShowGPSSettings(Activity activity) {
         String provider = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
-        if(!provider.contains("gps")){ //if gps is disabled
+        if(!provider.contains("gps")) { //if gps is disabled
             try {
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                builder.setTitle("NO GPS")
+                builder.setTitle("Please enable GPS")
                         .setMessage("Please select High Accuracy Location Mode")
                         .setCancelable(true)
                         .setPositiveButton("Cancel",new DialogInterface.OnClickListener() {
@@ -145,26 +119,18 @@ public class MainActivity extends AppCompatActivity{
                                 startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)) ;
                             }
                         });
-
-
                 AlertDialog alert = builder.create();
                 alert.show();
-
             }
-            catch(Exception e)
-            {
-                
+            catch(Exception e) {
+                e.printStackTrace();
             }
         }        
     }
 
-
     boolean checkConnection(Context context) {
-        ConnectivityManager cm =
-                (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
-        return isConnected ;
+        return  activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 }

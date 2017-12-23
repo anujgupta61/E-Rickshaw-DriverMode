@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">E-Rickshaw (Driver mode)</string>
+    <string name="app_name">Driver mode: E-Rickshaw App</string>
+    <string name="msg">This app sends your current location to the users.</string>
+    <string name="footer">Developed by - DIC, UIET, P.U., CHD</string>
+    <string name="driver_id">Driver ID</string>
+    <string name="driver_id_hint">Enter Driver Id here</string>
+    <string name="verify">VERIFY</string>
+    <string name="logo">Logo</string>
 </resources>
